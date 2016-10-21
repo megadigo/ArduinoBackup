@@ -1,7 +1,7 @@
 // ARDUINO NANO 5V
-// HC-60        RX=3 TX=2 GND VND=5V
+// HC-60        RX=1 TX=2 GND VND=5V
 // OLED         SCK=A5 SDA=A4 GND VND=5V
-// DHT22        DAT=A1
+// DHT22        DAT=A3
 
 #include <SPI.h>
 #include <SoftwareSerial.h>
@@ -11,12 +11,12 @@
 #include <DHT.h>
 
 // HC-60
-#define RXPIN 2
-#define TXPIN 3
+#define RXPIN 1
+#define TXPIN 2
 SoftwareSerial BlueSerial(RXPIN, TXPIN);
 
 //DHT22
-#define DHTPIN 4     // what pin we're connected to
+#define DHTPIN 3     // what pin we're connected to
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
 DHT dht(DHTPIN, DHTTYPE);
 float hum;  //Stores humidity value
@@ -55,8 +55,6 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] =
 void setup() {
   
   //HC60
-  pinMode(RXPIN, INPUT);
-  pinMode(TXPIN, OUTPUT);
   BlueSerial.begin(9600);
   BlueSerial.println("BlueSerial start!");
 
@@ -72,17 +70,18 @@ void setup() {
   // DHT22
   dht.begin();
 }
-
+string mess="";
 void loop() {
   // put your main code here, to run repeatedly:
+  
    if(BlueSerial.available() > 0)
     {
         // Read off all bytes
         char val = BlueSerial.read();
-        Serial.print(val);
-        delay(100);  
+        mess = mess + val;
+          
     }
-    delay(1000);
+    //delay(1000);
     hum = dht.readHumidity();
     temp= dht.readTemperature();
 
@@ -93,6 +92,11 @@ void loop() {
   display.setCursor(0,0);
   display.print("Temperatura:");
   display.println(temp);
+ 
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0,15);
+  display.print("Twitter:");
+  display.print(mess);
   display.display();
-  
 }
