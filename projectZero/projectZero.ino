@@ -1,5 +1,5 @@
 // ARDUINO NANO 5V
-// HC-60        RX=1 TX=2 GND VND=5V
+// HC-60        RX=2 TX=5 GND VND=5V
 // OLED         SCK=A5 SDA=A4 GND VND=5V
 // DHT22        DAT=A3
 
@@ -11,7 +11,7 @@
 #include <DHT.h>
 
 // HC-60
-#define RXPIN 1
+#define RXPIN 5
 #define TXPIN 2
 SoftwareSerial BlueSerial(RXPIN, TXPIN);
 
@@ -31,23 +31,6 @@ Adafruit_SSD1306 display(OLED_RESET);
 #define DELTAY 2
 #define LOGO16_GLCD_HEIGHT 16 
 #define LOGO16_GLCD_WIDTH  16 
-static const unsigned char PROGMEM logo16_glcd_bmp[] =
-{ B00000000, B11000000,
-  B00000001, B11000000,
-  B00000001, B11000000,
-  B00000011, B11100000,
-  B11110011, B11100000,
-  B11111110, B11111000,
-  B01111110, B11111111,
-  B00110011, B10011111,
-  B00011111, B11111100,
-  B00001101, B01110000,
-  B00011011, B10100000,
-  B00111111, B11100000,
-  B00111111, B11110000,
-  B01111100, B11110000,
-  B01110000, B01110000,
-  B00000000, B00110000 };
 #if (SSD1306_LCDHEIGHT != 32)
 #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
@@ -55,12 +38,14 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] =
 void setup() {
   
   //HC60
+  pinMode(RXPIN, INPUT);
+  pinMode(TXPIN, OUTPUT);
   BlueSerial.begin(9600);
   BlueSerial.println("BlueSerial start!");
 
   //SERIAL
-  Serial.begin(9600);
-  Serial.println("Serial start!");
+  //Serial.begin(9600);
+  //Serial.println("Serial start!");
   
   //OLED
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -70,16 +55,19 @@ void setup() {
   // DHT22
   dht.begin();
 }
-string mess="";
+String message="";
+int maxm = 20;
 void loop() {
   // put your main code here, to run repeatedly:
-  
-   if(BlueSerial.available() > 0)
+ 
+   if(BlueSerial.available())
     {
-        // Read off all bytes
-        char val = BlueSerial.read();
-        mess = mess + val;
-          
+      // Read off all bytes
+      char val = (char)BlueSerial.read();
+      message = message + val;
+      if(message.length() > maxm){
+        message= message.substring(message.length() - maxm);
+      }
     }
     //delay(1000);
     hum = dht.readHumidity();
@@ -90,13 +78,13 @@ void loop() {
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.print("Temperatura:");
-  display.println(temp);
- 
+  display.print(temp);
+  display.print((char)247);
+  display.println("C");
   display.setTextSize(1);
   display.setTextColor(WHITE);
-  display.setCursor(0,15);
-  display.print("Twitter:");
-  display.print(mess);
+  display.setCursor(0,9);
+  display.println("Blue Message:");
+  display.print(message);
   display.display();
 }
