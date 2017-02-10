@@ -1,0 +1,12 @@
+C:\Users\rcordeiro.AMORIM\AppData\Local\Temporary Projects\BlueArduino\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\rcordeiro.AMORIM\AppData\Local\Temporary Projects\BlueArduino\bin\Debug\BlueArduino.exe.config
+C:\Users\rcordeiro.AMORIM\AppData\Local\Temporary Projects\BlueArduino\bin\Debug\BlueArduino.exe
+C:\Users\rcordeiro.AMORIM\AppData\Local\Temporary Projects\BlueArduino\bin\Debug\BlueArduino.pdb
+C:\Users\rcordeiro.AMORIM\AppData\Local\Temporary Projects\BlueArduino\obj\Debug\BlueArduino.exe
+C:\Users\rcordeiro.AMORIM\AppData\Local\Temporary Projects\BlueArduino\obj\Debug\BlueArduino.pdb
+C:\Users\rcordeiro.AMORIM\Documents\GITS\GitHub\CodeArduino\BlueArduino\BlueArduino\bin\Debug\BlueArduino.exe.config
+C:\Users\rcordeiro.AMORIM\Documents\GITS\GitHub\CodeArduino\BlueArduino\BlueArduino\obj\Debug\BlueArduino.exe
+C:\Users\rcordeiro.AMORIM\Documents\GITS\GitHub\CodeArduino\BlueArduino\BlueArduino\obj\Debug\BlueArduino.pdb
+C:\Users\rcordeiro.AMORIM\Documents\GITS\GitHub\CodeArduino\BlueArduino\BlueArduino\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\rcordeiro.AMORIM\Documents\GITS\GitHub\CodeArduino\BlueArduino\BlueArduino\bin\Debug\BlueArduino.exe
+C:\Users\rcordeiro.AMORIM\Documents\GITS\GitHub\CodeArduino\BlueArduino\BlueArduino\bin\Debug\BlueArduino.pdb

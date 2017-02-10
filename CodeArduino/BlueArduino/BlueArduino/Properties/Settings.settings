@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="BlueArduino.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PORT" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM3</Value>
+    </Setting>
+    <Setting Name="RSS" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://news.google.com/news?cf=all&amp;hl=pt-PT&amp;pz=1&amp;ned=pt-PT_pt&amp;output=rss</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
