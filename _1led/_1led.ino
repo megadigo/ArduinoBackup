@@ -1,16 +1,11 @@
 void setup() {
   // put your setup code here, to run once:
-
+  pinMode(5,INPUT);
+  pinMode(6,INPUT);
 }
 boolean boo = false;
 void loop() {
   // put your main code here, to run repeatedly:
-  pinMode(13,OUTPUT);
-  boo = !boo;
-  if (boo==true) {
-    digitalWrite(13,HIGH);
-  } else {
-    digitalWrite(13,LOW);
-  }
-  delay(100);
+   digitalWrite(5,0.1);
+   digitalWrite(6,0.1); 
 }
