@@ -5,7 +5,7 @@
 #define COLL_DIST 20 // sets distance at which the Obstacle avoiding Robot stops and reverses to 10cm
 #define TURN_DIST COLL_DIST+10 // sets distance at which the Obstacle avoiding Robot looks away from object (not reverse) to 20cm (10+10)
 #define MOTORS_CALIBRATION_OFFSET 0
-#define MOTORS_MAXSPEED 80
+#define MOTORS_MAXSPEED 120
 #define EYE_TRIGGER_PIN 14
 #define EYE_ECHO_PIN 15
 #define NECK_PIN 10
@@ -30,6 +30,8 @@ int rightDistance = 0;
 Servo neck;
 
 // DC Motors
+double MOTOR_LEFT_FORCE = 1;
+double MOTOR_RIGHT_FORCE = 1;
 AF_DCMotor rightMotor(RIGHT_MOTOR_PIN,MOTOR12_64KHZ); 
 AF_DCMotor leftMotor(LEFT_MOTOR_PIN,MOTOR12_64KHZ); 
 String motorSet = "FORWARD";
@@ -44,8 +46,10 @@ void setup() {
   delay(2000);
 
   //Motor Setup
-  leftMotor.setSpeed(MOTORS_MAXSPEED - (MOTORS_CALIBRATION_OFFSET / 2)); 
-  rightMotor.setSpeed(MOTORS_MAXSPEED + (MOTORS_CALIBRATION_OFFSET / 2)); 
+  MOTOR_LEFT_FORCE = 1;
+  MOTOR_RIGHT_FORCE = 1;
+  leftMotor.setSpeed(MOTOR_LEFT_FORCE * MOTORS_MAXSPEED - (MOTORS_CALIBRATION_OFFSET / 2)); 
+  rightMotor.setSpeed(MOTOR_RIGHT_FORCE * MOTORS_MAXSPEED + (MOTORS_CALIBRATION_OFFSET / 2)); 
 
   //Eye Setup
   pinMode(EYE_TRIGGER_PIN, OUTPUT); // Sets the EYE_TRIGGER_PIN as an Output
@@ -71,11 +75,12 @@ void setup() {
 void loop() {
   
   NCicles++; 
-
+  
   // Scan 
   neck.write(angle);
   delay(90);
-  readEye;
+  readEye();
+
   // Calculate distances
   if(distance<=minDistance) {
     minDistance=distance;
@@ -95,19 +100,25 @@ void loop() {
   if(angle == 90 && distance <= frontDistance) {
     frontDistance = distance;
   }
+  Serial.print("Distance = ");
+  Serial.print(distance);
+  Serial.print(",minDistance");
+  Serial.print(minDistance);
+  Serial.print(",maxDistance");
+  Serial.println(maxDistance);
     
   if(angle<=36) {
+    // Correct the movement based in minDistance and maxDistance
+    correctMove();
+    
     // End neck rotation reset distance and angle
     angle=144;
     maxAngle=0;
     maxDistance = 0;
     minAngle = 90;
     minDistance = 5000;
-    // Correct the movement
-      correctMove();
-    //
   } else {
-    angle -=18;
+    angle -= 18;
   }
 }
 
@@ -118,12 +129,16 @@ void correctMove() {
   //leftDistance    minima distancia a esquerda
   //frontDistance   minima distancia em frente
   //rightDistance minima distancia a direita
-  if(minAngle<80) {
-    turnRight();
-  } else if(minAngle>100) {
-    turnLeft();
+  if(minDistance<=5) {
+    if(minAngle<80) {
+      turnRight();
+    } else if(minAngle>100) {
+      turnLeft();
+    } else {
+      moveForward();
+    }
   } else {
-    moveForward();
+   moveForward();
   }
 }
 
@@ -182,5 +197,19 @@ void lookLeft() {
   leftMotor.run(BACKWARD);  // looking left? set left motor backwards for 400ms
   delay(400);
   leftMotor.run(FORWARD);
+}
+
+void moveLeft(){
+  MOTOR_LEFT_FORCE = 0.8;
+  MOTOR_RIGHT_FORCE = 1;
+  leftMotor.setSpeed(MOTOR_LEFT_FORCE * MOTORS_MAXSPEED - (MOTORS_CALIBRATION_OFFSET / 2)); 
+  rightMotor.setSpeed(MOTOR_RIGHT_FORCE * MOTORS_MAXSPEED + (MOTORS_CALIBRATION_OFFSET / 2)); 
+}
+
+void moveRight(){
+  MOTOR_LEFT_FORCE = 1;
+  MOTOR_RIGHT_FORCE = 0.8;
+  leftMotor.setSpeed(MOTOR_LEFT_FORCE * MOTORS_MAXSPEED - (MOTORS_CALIBRATION_OFFSET / 2)); 
+  rightMotor.setSpeed(MOTOR_RIGHT_FORCE * MOTORS_MAXSPEED + (MOTORS_CALIBRATION_OFFSET / 2)); 
 }
 
