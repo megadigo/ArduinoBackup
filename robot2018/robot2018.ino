@@ -4,8 +4,8 @@
 // Contants
 #define COLL_DIST 20 // sets distance at which the Obstacle avoiding Robot stops and reverses to 10cm
 #define TURN_DIST COLL_DIST+10 // sets distance at which the Obstacle avoiding Robot looks away from object (not reverse) to 20cm (10+10)
-#define MOTORS_CALIBRATION_OFFSET 0
-#define MOTORS_MAXSPEED 120
+#define MOTORS_CALIBRATION_OFFSET -10
+#define MOTORS_MAXSPEED 100
 #define EYE_TRIGGER_PIN 14
 #define EYE_ECHO_PIN 15
 #define NECK_PIN 10
@@ -80,14 +80,14 @@ void loop() {
   neck.write(angle);
   delay(90);
   readEye();
-
+  
   // Calculate distances
   if(distance<=minDistance) {
-    minDistance=distance;
+    minDistance = distance;
     minAngle = angle;
   }
-  if(distance>=maxDistance) {
-    maxDistance=distance;
+  if(distance >= maxDistance) {
+    maxDistance = distance;
     maxAngle = angle;
   }
   // Minn in quadrantes
@@ -106,36 +106,27 @@ void loop() {
   Serial.print(minDistance);
   Serial.print(",maxDistance");
   Serial.println(maxDistance);
+
+  correctMove();
     
   if(angle<=36) {
-    // Correct the movement based in minDistance and maxDistance
-    correctMove();
-    
-    // End neck rotation reset distance and angle
     angle=144;
     maxAngle=0;
     maxDistance = 0;
     minAngle = 90;
     minDistance = 5000;
   } else {
+    moveForward();
     angle -= 18;
   }
 }
 
 void correctMove() {
-  //minAngle        angulo que leu a distancia minima
-  //minDistance     distancia minima
-
-  //leftDistance    minima distancia a esquerda
-  //frontDistance   minima distancia em frente
-  //rightDistance minima distancia a direita
-  if(minDistance<=5) {
-    if(minAngle<80) {
+  if(distance<=10) {
+    if(angle<90){
       turnRight();
-    } else if(minAngle>100) {
-      turnLeft();
     } else {
-      moveForward();
+      turnLeft();
     }
   } else {
    moveForward();
@@ -178,24 +169,31 @@ void turnRight() {
   motorSet = "RIGHT";
   leftMotor.run(FORWARD);      // turn motor 1 forward
   rightMotor.run(BACKWARD);     // turn motor 2 backward
+  delay(200); // run motors this way for 400ms
+  leftMotor.run(FORWARD);      // turn it on going forward
+  rightMotor.run(FORWARD);      // turn it on going forward
 }
 
 void turnLeft() {
   motorSet = "LEFT";
   leftMotor.run(BACKWARD);     // turn motor 1 backward
   rightMotor.run(FORWARD);      // turn motor 2 forward
-  delay(400); // run motors this way for 400ms
+  delay(200); // run motors this way for 400ms
+  leftMotor.run(FORWARD);      // turn it on going forward
+  rightMotor.run(FORWARD);      // turn it on going forward
 }
 
+
+/*
 void lookRight() {
   rightMotor.run(BACKWARD);  // looking right? set right motor backwards for 400ms
-  delay(400);
+  delay(100);
   rightMotor.run(FORWARD);
 }
 
 void lookLeft() {
   leftMotor.run(BACKWARD);  // looking left? set left motor backwards for 400ms
-  delay(400);
+  delay(100);
   leftMotor.run(FORWARD);
 }
 
@@ -212,4 +210,4 @@ void moveRight(){
   leftMotor.setSpeed(MOTOR_LEFT_FORCE * MOTORS_MAXSPEED - (MOTORS_CALIBRATION_OFFSET / 2)); 
   rightMotor.setSpeed(MOTOR_RIGHT_FORCE * MOTORS_MAXSPEED + (MOTORS_CALIBRATION_OFFSET / 2)); 
 }
-
+*/
